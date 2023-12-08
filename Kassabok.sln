@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kassabok", "Kassabok\Kassabok.csproj", "{355F419C-2A76-4ADB-A065-F4726FFF1F2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kassabok.Test", "Kassabok.Test\Kassabok.Test.csproj", "{5AB512C0-DE43-48CB-AEDB-42CF9727D8D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{355F419C-2A76-4ADB-A065-F4726FFF1F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{355F419C-2A76-4ADB-A065-F4726FFF1F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{355F419C-2A76-4ADB-A065-F4726FFF1F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{355F419C-2A76-4ADB-A065-F4726FFF1F2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AB512C0-DE43-48CB-AEDB-42CF9727D8D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AB512C0-DE43-48CB-AEDB-42CF9727D8D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AB512C0-DE43-48CB-AEDB-42CF9727D8D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AB512C0-DE43-48CB-AEDB-42CF9727D8D5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D40AC817-9E75-4772-AF5F-65D1CC4881DE}
+	EndGlobalSection
+EndGlobal
