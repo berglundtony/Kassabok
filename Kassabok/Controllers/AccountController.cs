@@ -54,8 +54,7 @@ namespace Kassabok.Controllers
                 if (account.Name != null && account.Balance != null)
                 {
                     accountList.Add(new AccountRequestDTO { AccountName = account.Name, Balance = account.Balance.ToString() }); 
-                }
-                       
+                }        
             }
             return Ok(accountList);
          }
