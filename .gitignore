@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Kassabok.Test/integrationsettings.json
+/Kassabok.Test/IAccountTypeConfigService.cs
+/Kassabok.Test/ApiWebApplicationFactory1.cs
+/Kassabok.Test/ApiWebApplicationFactory.cs

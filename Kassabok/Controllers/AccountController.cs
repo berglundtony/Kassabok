@@ -15,13 +15,13 @@ namespace Kassabok.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly TransactionsDbContext _context;
         private readonly IEntityFunctions _entityFunctions;
         private readonly IFunctions _functions;
 
-        public AccountsController(TransactionsDbContext context, IEntityFunctions entityFunctions, IFunctions functions)
+        public AccountController(TransactionsDbContext context, IEntityFunctions entityFunctions, IFunctions functions)
         {
             _context = context;
             _entityFunctions = entityFunctions;
@@ -64,8 +64,6 @@ namespace Kassabok.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(int id)
         {
-            var list = new List<Account>();
-    
             if (_context.Accounts == null)
             {
               return NotFound();
@@ -91,17 +89,15 @@ namespace Kassabok.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(int id, [FromBody] AccountDTO accountDTO)
         {
-            if (id != accountDTO.AccountId)
-            {
-                return BadRequest();
-            }
             var accountEntity = await _context.Accounts.FindAsync(id);
             accountEntity.Balance = accountDTO.Balance;
             _context.Entry(accountEntity).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync();
+                var account = await GetAccount(accountEntity.AccountId);
+                accountEntity.AccountType = account.Value.AccountType;
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -115,7 +111,7 @@ namespace Kassabok.Controllers
                 }
             }
 
-           return CreatedAtAction("GetAccount", new { id = accountEntity.AccountId, Type = accountEntity.Balance }, accountEntity);
+           return CreatedAtAction("GetAccount", new { id = accountEntity.AccountId }, accountEntity);
         }
 
         // POST: api/Accounts

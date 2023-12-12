@@ -1,5 +1,6 @@
 ﻿using Kassabok.Functions.Interface;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
 namespace Kassabok.Test
 {

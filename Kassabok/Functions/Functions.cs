@@ -63,28 +63,8 @@ namespace Kassabok.Functions
 
         public Account? SetPropertyValuesFromAccount(int fromAccountTypeId, int balanceFromAccount, int fromAccountId, Transaction transaction, Account? account)
         {
-            if (account.AccountType.Type == TransactionType.check || account.AccountType.Type == TransactionType.income)
-            {
-                if (balanceFromAccount > 0 && balanceFromAccount >= transaction.Amount)
-                {
-                    balanceFromAccount -= transaction.Amount;
-                }
-                else
-                {
-                    account = null;
-                }
-            }
-            else
-            {
-                if (balanceFromAccount < 0)
-                {
-                    balanceFromAccount += transaction.Amount;
-                }
-                else
-                {
-                    balanceFromAccount -= transaction.Amount;
-                }
-            }
+
+            var balFromAcc = account.AccountType.Type == TransactionType.check ? balanceFromAccount -= transaction.Amount : balanceFromAccount += transaction.Amount;
 
             if (account != null)
             {
@@ -100,7 +80,7 @@ namespace Kassabok.Functions
         {
             if (accountEntity != null)
             {
-                var balToAcc = accountEntity.AccountType.Type == TransactionType.check || accountEntity.AccountType.Type == TransactionType.income ? balanceToAccount += transaction.Amount : balanceToAccount -= transaction.Amount;
+                var balToAcc = accountEntity.AccountType.Type == TransactionType.check ? balanceToAccount += transaction.Amount : balanceToAccount -= transaction.Amount;
 
                 accountEntity.AccountId = toAccountId;
                 accountEntity.Balance = balanceToAccount;

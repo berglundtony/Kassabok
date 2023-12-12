@@ -6,9 +6,6 @@ namespace Kassabok.Data.DTO
 {
     public class AccountDTO
     {
-
-        public int AccountId { get; set; }
-        public int TypeId { get; set; }
         public int Balance { get; set; }
     }
     public class AccountInsertDTO

@@ -17,13 +17,13 @@ namespace Kassabok.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionsController : ControllerBase
+    public class TransactionController : ControllerBase
     {
         private readonly TransactionsDbContext _context;
         private readonly IFunctions _functions;
         private readonly IEntityFunctions _entityFunctions;
 
-        public TransactionsController(TransactionsDbContext context, IFunctions functions, IEntityFunctions entityFunctions)
+        public TransactionController(TransactionsDbContext context, IFunctions functions, IEntityFunctions entityFunctions)
         {
             _context = context;
             _functions = functions;
