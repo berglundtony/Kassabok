@@ -49,14 +49,14 @@ namespace Kassabok.Controllers
           {
               return NotFound();
           }
-            var transactionDTO = await _context.Transactions.FindAsync(id);
+            var transaction = await _context.Transactions.FindAsync(id);
 
-            if (transactionDTO == null)
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            return transactionDTO;
+            return transaction;
         }
 
         // PUT: api/Transactions/5
@@ -89,7 +89,7 @@ namespace Kassabok.Controllers
         // POST: api/Transactions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TransactionDTO>> PostTransaction(TransactionDTO transactionDTO)
+        public async Task<IActionResult> PostTransaction(TransactionDTO transactionDTO)
         {
             using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
