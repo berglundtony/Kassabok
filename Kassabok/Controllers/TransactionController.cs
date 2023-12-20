@@ -83,7 +83,7 @@ namespace Kassabok.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok("transaction modification successful");
         }
 
         // POST: api/Transactions
