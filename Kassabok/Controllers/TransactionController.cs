@@ -62,7 +62,7 @@ namespace Kassabok.Controllers
         // PUT: api/Transactions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTransaction(int id, TransactionDTO transactionDTO)
+        public async Task<ActionResult<Entity.Transaction>> PutTransaction(int id, TransactionDTO transactionDTO)
         {
 
             _context.Entry(transactionDTO).State = EntityState.Modified;
@@ -89,7 +89,7 @@ namespace Kassabok.Controllers
         // POST: api/Transactions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostTransaction(TransactionDTO transactionDTO)
+        public async Task<ActionResult<Entity.Transaction>> PostTransaction(TransactionDTO transactionDTO)
         {
             using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
@@ -133,7 +133,7 @@ namespace Kassabok.Controllers
 
                 transactionScope.Complete();
 
-                return Ok("transaction successful");
+                return CreatedAtAction("GetTransaction", new { id = transaction.TransactionId }, transaction); ;
             }
             catch (Exception ex)
             {

@@ -86,7 +86,7 @@ namespace Kassabok.Controllers
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(int id, [FromBody] AccountDTO accountDTO)
+        public async Task<ActionResult<Account>> PutAccount(int id, [FromBody] AccountDTO accountDTO)
         {
             var accountEntity = await _context.Accounts.FindAsync(id);
             accountEntity.Balance = accountDTO.Balance;

@@ -57,7 +57,7 @@ namespace Kassabok.Controllers
 
         // POST api/<AccountTypeController>
         [HttpPost]
-        public async Task<ActionResult<IEnumerable>> CreateAccountType(string? name, string? transactionType)
+        public async Task<ActionResult<AccountType>> CreateAccountType(string? name, string? transactionType)
         {
             string? shortendstring = name?.Length > 20 ? _functions.GetTwentyLettersFromAccountTypeName(name) : name;
 
@@ -80,7 +80,7 @@ namespace Kassabok.Controllers
 
         // PUT api/<AccountController2>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult>Put(int id, [FromBody] AccountTypeRequestDTO? accountType)
+        public async Task<ActionResult<AccountType>>Put(int id, [FromBody] AccountTypeRequestDTO? accountType)
         {
             var accountTypeEntity = await _accountTypeRepository.GetByIdAsync(id);
             if(accountTypeEntity == null)
