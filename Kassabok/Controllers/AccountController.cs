@@ -44,7 +44,7 @@ namespace Kassabok.Controllers
             {
                 Name = types.Name,
                 Balance = types.Account.Balance.ToString(),
-                Type = types.Type
+                Type = types.Type,
             })
             .OrderBy(t => t.Name)
             .ToListAsync();

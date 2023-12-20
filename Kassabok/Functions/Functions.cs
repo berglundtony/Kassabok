@@ -64,7 +64,7 @@ namespace Kassabok.Functions
         public Account? SetPropertyValuesFromAccount(int fromAccountTypeId, int balanceFromAccount, int fromAccountId, Transaction transaction, Account? account)
         {
 
-            var balFromAcc = account.AccountType.Type == TransactionType.check ? balanceFromAccount -= transaction.Amount : balanceFromAccount += transaction.Amount;
+            balanceFromAccount = account.AccountType.Type == TransactionType.check ? balanceFromAccount - transaction.Amount : balanceFromAccount + transaction.Amount;
 
             if (account != null)
             {
@@ -80,7 +80,7 @@ namespace Kassabok.Functions
         {
             if (accountEntity != null)
             {
-                var balToAcc = accountEntity.AccountType.Type == TransactionType.check ? balanceToAccount += transaction.Amount : balanceToAccount -= transaction.Amount;
+                balanceToAccount = accountEntity.AccountType.Type == TransactionType.check ? balanceToAccount + transaction.Amount : balanceToAccount - transaction.Amount;
 
                 accountEntity.AccountId = toAccountId;
                 accountEntity.Balance = balanceToAccount;

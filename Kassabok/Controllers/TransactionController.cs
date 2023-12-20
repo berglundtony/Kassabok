@@ -64,26 +64,68 @@ namespace Kassabok.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Entity.Transaction>> PutTransaction(int id, TransactionDTO transactionDTO)
         {
-
-            _context.Entry(transactionDTO).State = EntityState.Modified;
-
-            try
+            var transactionEntity = await _context.Transactions.FindAsync(id);
+            if (transactionEntity != null && transactionDTO != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TransactionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                transactionEntity.FromAccount = transactionDTO.FromAccount;
+                transactionEntity.ToAccount = transactionDTO.ToAccount;
+                transactionEntity.Amount = transactionDTO.Amount;
+                transactionEntity.TypeId = _entityFunctions.FindTypeIdByName(transactionDTO.ToAccount);
+                transactionEntity.AccountId = _entityFunctions.FindAccountIdByTypeID(transactionEntity.TypeId);
 
-            return Ok("transaction modification successful");
+                _context.Entry(transactionEntity).State = EntityState.Modified;
+
+                int fromAccountTypeId, toAccountTypeId, balanceFromAccount, balanceToAccount, fromAccountId, toAccountId;
+
+                _entityFunctions.GetIdAndBalanceValues(transactionDTO, out fromAccountTypeId, out toAccountTypeId,
+                    out balanceFromAccount, out balanceToAccount,
+                    out fromAccountId, out toAccountId);
+
+                var account = _context.Accounts.Include(t => t.AccountType).FirstOrDefault(e => e.AccountId == fromAccountId);
+                // Update account table with the reduced balance after transaction
+                account = _functions.SetPropertyValuesFromAccount(fromAccountTypeId, balanceFromAccount, fromAccountId, transactionEntity, account);
+                if (account == null)
+                {
+                    return BadRequest($"No transaction will occur of null values for that from accountId '{transactionDTO.FromAccount}' ");
+                }
+                _context.Accounts.Update(account);
+
+                // Get the current account,accountType and Transaction entity by the to accontId from the database.
+                Account? accountEntity = _context.Accounts.Include(t => t.AccountType).FirstOrDefault(e => e.AccountId == transactionEntity.AccountId);
+                if (accountEntity == null)
+                {
+                    return BadRequest($"No transaction will occur because of null values for that to accountId '{transactionDTO.ToAccount}' ");
+                }
+
+                // Update account table with the increased balance after transaction
+                accountEntity = _functions.SetPropertyValuesToAccount(toAccountTypeId, balanceToAccount, toAccountId, transactionEntity, accountEntity);
+                _context.Accounts.Update(accountEntity);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TransactionExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            else
+            {
+                return BadRequest("From account and/or to account and/or amount doesnt exists");
+            }
+    
+
+
+
+            return CreatedAtAction("GetTransaction", new { id = transactionEntity.TransactionId }, transactionEntity);
         }
 
         // POST: api/Transactions
@@ -118,13 +160,17 @@ namespace Kassabok.Controllers
                 account = _functions.SetPropertyValuesFromAccount(fromAccountTypeId, balanceFromAccount, fromAccountId, transaction, account);
                 if(account == null)
                 {
-                    return BadRequest($"No transaction will occur there is to less money in the fromAccount called '{transactionDTO.FromAccount}' ");
+                    return BadRequest($"No transaction will occur of null values for that from accountId '{transactionDTO.FromAccount}' ");
                 }
                 _context.Accounts.Update(account);
 
                 // Get the current account,accountType and Transaction entity by the to accontId from the database.
                 Account? accountEntity = _context.Accounts.Include(t => t.AccountType).FirstOrDefault(e => e.AccountId == toAccountId);
-            
+                if (accountEntity == null)
+                {
+                    return BadRequest($"No transaction will occur because of null values for that to accountId '{transactionDTO.ToAccount}' ");
+                }
+
                 // Update account table with the increased balance after transaction
                 accountEntity = _functions.SetPropertyValuesToAccount(toAccountTypeId, balanceToAccount, toAccountId, transaction, accountEntity);
                 _context.Accounts.Update(accountEntity);
@@ -133,7 +179,7 @@ namespace Kassabok.Controllers
 
                 transactionScope.Complete();
 
-                return CreatedAtAction("GetTransaction", new { id = transaction.TransactionId }, transaction); ;
+                return CreatedAtAction("GetTransaction", new { id = transaction.TransactionId }, transaction); 
             }
             catch (Exception ex)
             {
